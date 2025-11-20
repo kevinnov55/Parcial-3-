@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
@@ -58,8 +59,6 @@ public class FormularioControlador {
             return new SimpleStringProperty(capStr);
         });
 
-
-        datos.setAll(servicio.listarTodos());
         tabla.setItems(datos);
     }
 
@@ -79,18 +78,18 @@ public class FormularioControlador {
             Vehiculo pa;
             if ("Camion".equals(tipo)) {
                 int dur = Integer.parseInt(txtCapacidad.getText().trim());
-                String genero = "";
+                String genero = ""; 
                 pa = new Camion(placa, marca, modelo, dur, conductor, genero);
             } else {
                 int dur = txtCapacidad.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtCapacidad.getText().trim());
-                int temp = 0; 
+                int temp = 0;
                 pa = new Bus(placa, marca, modelo, dur, conductor, temp);
             }
 
-            datos.add(pa);
             servicio.crear(pa);
+            datos.add(pa);
             clear();
-            info("Creado correctamente");
+            info("Creado y guardado. Ya visible en la tabla. Pulse 'Listar' para recargar desde archivo.");
 
         } catch (Exception ex) {
             alerta("Error en los datos: " + ex.getMessage());
@@ -121,7 +120,6 @@ public class FormularioControlador {
     void accionModificar() {
         try {
             Vehiculo seleccionado = tabla.getSelectionModel().getSelectedItem();
-
 
             String placaInput = txtPlaca.getText().trim();
             if (seleccionado == null) {
@@ -207,8 +205,17 @@ public class FormularioControlador {
 
     @FXML
     void accionDeserializar() {
-        servicio.cargarArchivo();
+        servicio.cargarArchivo(); 
         info("Datos cargados desde data.dat");
+    }
+
+    @FXML
+    void accionSalir() {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "¿Desea salir?", ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = a.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Platform.exit();
+        }
     }
 
     @FXML
@@ -252,4 +259,6 @@ public class FormularioControlador {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
     }
 }
+
+
 
