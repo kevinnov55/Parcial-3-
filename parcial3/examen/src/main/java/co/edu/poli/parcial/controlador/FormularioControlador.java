@@ -58,7 +58,7 @@ public class FormularioControlador {
             return new SimpleStringProperty(capStr);
         });
 
-        // Cargar datos existentes desde el servicio (archivo) al iniciar
+
         datos.setAll(servicio.listarTodos());
         tabla.setItems(datos);
     }
@@ -79,11 +79,11 @@ public class FormularioControlador {
             Vehiculo pa;
             if ("Camion".equals(tipo)) {
                 int dur = Integer.parseInt(txtCapacidad.getText().trim());
-                String genero = ""; // campo removido de la UI, usar valor por defecto
+                String genero = "";
                 pa = new Camion(placa, marca, modelo, dur, conductor, genero);
             } else {
                 int dur = txtCapacidad.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtCapacidad.getText().trim());
-                int temp = 0; // campo de temporadas removido de la UI
+                int temp = 0; 
                 pa = new Bus(placa, marca, modelo, dur, conductor, temp);
             }
 
@@ -122,7 +122,7 @@ public class FormularioControlador {
         try {
             Vehiculo seleccionado = tabla.getSelectionModel().getSelectedItem();
 
-            // Permitir modificar por placa si no hay selección en la tabla
+
             String placaInput = txtPlaca.getText().trim();
             if (seleccionado == null) {
                 if (placaInput.isEmpty()) {
@@ -150,11 +150,11 @@ public class FormularioControlador {
             try {
                 if (cmbTipo.getValue().equals("Camion")) {
                     int dur = txtCapacidad.getText().trim().isEmpty() ? (int) seleccionado.getCapacidadCarga() : Integer.parseInt(txtCapacidad.getText().trim());
-                    String genero = ""; // UI no recoge genero
+                    String genero = ""; 
                     pa = new Camion(placa, marca, modelo, dur, conductor, genero);
                 } else {
                     int dur = txtCapacidad.getText().trim().isEmpty() ? (int) seleccionado.getCapacidadCarga() : Integer.parseInt(txtCapacidad.getText().trim());
-                    int temp = 0; // UI no recoge temporadas
+                    int temp = 0; 
                     pa = new Bus(placa, marca, modelo, dur, conductor, temp);
                 }
             } catch (NumberFormatException nfe) {
@@ -207,13 +207,13 @@ public class FormularioControlador {
 
     @FXML
     void accionDeserializar() {
-        servicio.cargarArchivo(); // solo carga en memoria, no se muestra
+        servicio.cargarArchivo();
         info("Datos cargados desde data.dat");
     }
 
     @FXML
     void accionListar() {
-        datos.setAll(servicio.listarTodos()); // ahora sí se muestran en la tabla
+        datos.setAll(servicio.listarTodos()); 
         tabla.refresh();
     }
 
@@ -252,3 +252,4 @@ public class FormularioControlador {
         new Alert(Alert.AlertType.INFORMATION, msg).showAndWait();
     }
 }
+
